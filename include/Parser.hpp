@@ -1,15 +1,18 @@
 #include <istream>
-#include "Order.hpp"
+#include "OrderBook.hpp"
 
-// Class for parsing an input stream of order entries into exchange orders.
+// Parses an input stream of order entries into exchange orders and inserts them
+// into the OrderBook.
 class OrderParser {
  public:
-  explicit OrderParser(std::istream& input_stream);
+  explicit OrderParser(OrderBook& book, std::istream& input_stream);
 
-  /// Parses the input stream and either returns a LimitOrder or IcebergOrder as
-  /// a pointer to an Order.
-  Order* parse() const;
+  /// Parses a line in the input stream and inserts it into the
+  /// OrderBook. Returns true if successful in parsing and inserting, false if
+  /// not.
+  bool ingest() const;
 
  private:
+  OrderBook& book;
   std::istream& input_stream;
 };

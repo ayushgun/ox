@@ -6,10 +6,10 @@
 #include "LimitOrder.hpp"
 #include "Order.hpp"
 
-OrderParser::OrderParser(std::istream& input_stream)
-    : input_stream(input_stream) {}
+OrderParser::OrderParser(OrderBook& book, std::istream& input_stream)
+    : book(book), input_stream(input_stream) {}
 
-Order* OrderParser::parse() const {
+bool OrderParser::ingest() const {
   std::string line;
 
   // Attempt to read a line from the input stream.
@@ -27,7 +27,7 @@ Order* OrderParser::parse() const {
     // Ensure there are enough tokens for a valid order. Less than 4 tokens
     // implies that there is not enough information for a valid order.
     if (tokens.size() < 4) {
-      return nullptr;
+      return false;
     }
 
     char type = tokens[0][0];
@@ -36,16 +36,18 @@ Order* OrderParser::parse() const {
     int size = std::stoi(tokens[3]);
     MarketSide side = (type == 'B') ? MarketSide::BID : MarketSide::ASK;
 
-    // Determine the order type by the number of tokens.
+    // Determine the order type by the number of tokens and insert the generated
+    // Order object into the book.
     if (tokens.size() == 5) {
       int peak_size = std::stoi(tokens[4]);
-      return new IcebergOrder(id, side, static_cast<PriceType>(price), size,
-                              peak_size);
+      book.insert(IcebergOrder(id, side, static_cast<PriceType>(price), size,
+                               peak_size));
     } else {
-      return new LimitOrder(id, side, static_cast<PriceType>(price), size);
+      book.insert(LimitOrder(id, side, static_cast<PriceType>(price), size));
     }
+
+    return true;
   }
 
-  // Return nullptr if no line was read, indicating end of input or error.
-  return nullptr;
+  return false;
 }
