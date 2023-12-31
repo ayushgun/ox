@@ -9,7 +9,7 @@
 
 OrderBookVisualizer::OrderBookVisualizer(const OrderBook& book) : book(book) {}
 
-std::ostream& operator<<(std::ostream& os,
+std::ostream& operator<<(std::ostream& output_stream,
                          const OrderBookVisualizer& visualizer) {
   std::ostringstream oss;
   oss << OrderBookVisualizer::DIVIDER << OrderBookVisualizer::HEADER;
@@ -31,8 +31,8 @@ std::ostream& operator<<(std::ostream& os,
   }
 
   oss << OrderBookVisualizer::DIVIDER;
-  os << oss.str();
-  return os;
+  output_stream << oss.str();
+  return output_stream;
 }
 
 void OrderBookVisualizer::add_table_row(std::ostringstream& oss,

@@ -5,13 +5,15 @@
 #include <string_view>
 #include "OrderBook.hpp"
 
+/// Represents a visualizer for the OrderBook, providing a tabular
+/// representation of orders.
 class OrderBookVisualizer {
  public:
   OrderBookVisualizer(const OrderBook& book);
 
   /// Overloads the output stream operator to enable visual representation of
   /// the OrderBook.
-  friend std::ostream& operator<<(std::ostream& os,
+  friend std::ostream& operator<<(std::ostream& output_stream,
                                   const OrderBookVisualizer& visualizer);
 
  private:
