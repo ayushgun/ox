@@ -16,6 +16,10 @@ class IcebergOrder : public Order {
   /// the peak size or the total quantity if it is smaller than the peak size.
   int get_visible_size() const noexcept override;
 
+  /// Determines if the iceberg order can be filled at the specified match
+  /// price, considering its limit price and visible peak size.
+  bool fillable(PriceType match_price) const noexcept override;
+
   /// Fills the iceberg order with an aggressive order. The return value
   /// indicates the state of the order (filled, peak filled, or unfilled) after
   /// the fill attempt.

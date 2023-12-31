@@ -9,6 +9,11 @@ int LimitOrder::get_visible_size() const noexcept {
   return get_size();
 }
 
+bool LimitOrder::fillable(PriceType match_price) const noexcept {
+  return get_side() == MarketSide::BID ? get_price() >= match_price
+                                       : get_price() <= match_price;
+}
+
 OrderStatus LimitOrder::fill(Order& aggressive_order) noexcept {
   // Trade size is set to the lesser of aggressive or resting order size to
   // prevent overfilling.

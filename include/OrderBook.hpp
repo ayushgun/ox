@@ -69,17 +69,14 @@ class OrderBook {
   }
 
  private:
-  /// Attempts to match an incoming aggressive order with  resting orders on the
-  /// opposite side of the book.
+  /// Attempts to match an incoming aggressive order with resting orders on the
+  /// opposite side of the book using a FIFO algorithm.
   template <typename OrderMap>
   void match(Order& aggressive_order, OrderMap& side_map) {
-    bool is_bid = aggressive_order.get_side() == MarketSide::BID;
-
     for (auto& [price, orders] : side_map) {
       // If the aggressive order's price is not favorable for a match, then stop
       // matching.
-      if ((is_bid && aggressive_order.get_price() < price) ||
-          (!is_bid && aggressive_order.get_price() > price)) {
+      if (!aggressive_order.fillable(price)) {
         break;
       }
 

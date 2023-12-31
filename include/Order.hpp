@@ -30,12 +30,13 @@ class Order {
   /// Sets a new size for the order.
   void set_size(int new_size) noexcept;
 
-  /// Returns the visible size of the order. Must be implemented in derived
-  /// classes.
+  /// Returns the visible size of the order.
   virtual int get_visible_size() const noexcept = 0;
 
-  /// Fills the order with an aggressive order. Must be implemented in derived
-  /// classes.
+  /// Determines whether the order is fillable at the given match price.
+  virtual bool fillable(PriceType match_price) const noexcept = 0;
+
+  /// Fills the order with an aggressive order.
   virtual OrderStatus fill(Order& aggressive_order) noexcept = 0;
 
   virtual ~Order() = default;

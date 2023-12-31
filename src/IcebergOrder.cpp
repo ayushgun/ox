@@ -15,6 +15,11 @@ int IcebergOrder::get_visible_size() const noexcept {
   return std::min(peak_size, get_size());
 }
 
+bool IcebergOrder::fillable(PriceType match_price) const noexcept {
+  return get_side() == MarketSide::BID ? get_price() >= match_price
+                                       : get_price() <= match_price;
+}
+
 OrderStatus IcebergOrder::fill(Order& aggressive_order) noexcept {
   // The trade size is the minimum of the aggressive order's size and the peak
   // size to ensures that only the visible part of the iceberg order can be
