@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 # Compiler flags for Debug build
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(DEV_WARNINGS "-Wall -Wextra -Werror -pedantic")
-    set(SANITIZERS "-fsanitize=undefined -fsanitize=thread")
+    set(SANITIZERS "-fsanitize=undefined -fsanitize=address")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${DEV_WARNINGS} ${SANITIZERS}")
 endif ()
 
