@@ -3,20 +3,33 @@
 #include "LimitOrder.hpp"
 #include "Order.hpp"
 #include "OrderBook.hpp"
+#include "Parser.hpp"
 #include "Visualizer.hpp"
 
 int main() {
   OrderBook book;
-  OrderBookVisualizer visualizer(book);
 
-  book.insert(LimitOrder(1, MarketSide::ASK, 101, 20000));
-  book.insert(LimitOrder(2, MarketSide::BID, 99, 50000));
-  book.insert(LimitOrder(3, MarketSide::ASK, 100, 10000));
-  book.insert(LimitOrder(4, MarketSide::ASK, 100, 7500));
-  book.insert(LimitOrder(5, MarketSide::BID, 98, 25500));
-  book.insert(IcebergOrder(6, MarketSide::BID, 100, 100000, 10000));
+  OrderBookVisualizer visual(book);
+  OrderParser parser(std::cin);
 
-  std::cout << visualizer << '\n';
+  while (true) {
+    std::cout << "Enter Order: ";
+    Order* order_ptr = parser.parse();
+
+    if (!order_ptr) {
+      std::cerr << "Invalid order format or command. Please try again.\n";
+      continue;
+    }
+
+    // Using RTTI to handle different order types dynamically.
+    if (auto limit_ptr = dynamic_cast<LimitOrder*>(order_ptr)) {
+      book.insert(*limit_ptr);
+    } else if (auto iceberg_ptr = dynamic_cast<IcebergOrder*>(order_ptr)) {
+      book.insert(*iceberg_ptr);
+    }
+
+    std::cout << visual << '\n';
+  }
 
   return 0;
 }
