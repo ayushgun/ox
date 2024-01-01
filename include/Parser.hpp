@@ -10,7 +10,7 @@ class OrderParser {
   /// Parses a line in the input stream and inserts it into the
   /// OrderBook. Returns true if successful in parsing and inserting, false if
   /// not.
-  bool ingest() const;
+  bool ingest();
 
  private:
   OrderBook& book;

@@ -9,7 +9,7 @@
 OrderParser::OrderParser(OrderBook& book, std::istream& input_stream)
     : book(book), input_stream(input_stream) {}
 
-bool OrderParser::ingest() const {
+bool OrderParser::ingest() {
   std::string line;
 
   // Attempt to read a line from the input stream.
