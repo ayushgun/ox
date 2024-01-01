@@ -10,7 +10,6 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${DEV_WARNINGS} ${SANITIZERS}")
 endif ()
 
-# Set the include directory
 set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 
 # Add the main executable
@@ -28,7 +27,7 @@ if(GTEST_FOUND)
     list(REMOVE_ITEM TEST_SOURCES "${PROJECT_SOURCE_DIR}/src/main.cpp")
 
     # Add the test executable
-    add_executable(OXTests test/BookTest.cpp ${TEST_SOURCES})
+    add_executable(OXTests test/OrderBookTest.cpp test/ParserTest.cpp ${TEST_SOURCES})
     target_link_libraries(OXTests GTest::GTest GTest::Main)
     target_include_directories(OXTests PRIVATE ${INCLUDE_DIR} ${GTEST_INCLUDE_DIRS})
     include(GoogleTest)
