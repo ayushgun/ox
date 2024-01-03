@@ -12,6 +12,8 @@ OrderBookVisualizer::OrderBookVisualizer(const OrderBook& book) : book(book) {}
 std::ostream& operator<<(std::ostream& output_stream,
                          const OrderBookVisualizer& visualizer) {
   std::ostringstream oss;
+
+  oss.imbue(std::locale("en_US.UTF-8"));  // Format number places consistently.
   oss << OrderBookVisualizer::DIVIDER << OrderBookVisualizer::HEADER;
 
   const auto& bids = visualizer.book.get_bids();
@@ -38,8 +40,6 @@ std::ostream& operator<<(std::ostream& output_stream,
 void OrderBookVisualizer::add_table_row(std::ostringstream& oss,
                                         const Order* bid_order,
                                         const Order* ask_order) const {
-  // Ensure consistent numeric formatting for prices.
-  oss.imbue(std::locale("en_US.UTF-8"));
   oss << "|";
 
   if (bid_order) {
