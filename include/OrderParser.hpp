@@ -8,9 +8,9 @@ class OrderParser {
   explicit OrderParser(OrderBook& book, std::istream& input_stream);
 
   /// Parses a line in the input stream and inserts it into the
-  /// OrderBook. Returns true if successful in parsing and inserting, false if
-  /// not.
-  bool ingest();
+  /// OrderBook. Throws if an invalid input is provided via the input
+  /// stream.
+  void ingest();
 
  private:
   OrderBook& book;
