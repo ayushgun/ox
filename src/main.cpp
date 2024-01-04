@@ -1,7 +1,8 @@
+#include <exception>
 #include <iostream>
 #include "OrderBook.hpp"
-#include "Parser.hpp"
-#include "Visualizer.hpp"
+#include "OrderBookVisualizer.hpp"
+#include "OrderParser.hpp"
 
 int main() {
   OrderBook book;
@@ -11,10 +12,11 @@ int main() {
 
   while (true) {
     std::cout << "Enter Order: ";
-    bool successfully_parsed = parser.ingest();
 
-    if (!successfully_parsed) {
-      std::cerr << "Invalid order format or command. Please try again.\n";
+    try {
+      parser.ingest();
+    } catch (std::exception& except) {
+      std::cerr << "Invalid order format or command: " << except.what() << '\n';
       continue;
     }
 
