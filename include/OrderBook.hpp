@@ -34,9 +34,6 @@ class OrderBook {
   void insert(OrderType order) {
     bool is_bid = order.get_side() == MarketSide::BID;
 
-    OrderList& level_orders =
-        is_bid ? bids[order.get_price()] : asks[order.get_price()];
-
     if (is_bid) {
       match(order, asks);
     } else {
@@ -44,6 +41,8 @@ class OrderBook {
     }
 
     if (order.get_size() > 0) {
+      OrderList& level_orders =
+          is_bid ? bids[order.get_price()] : asks[order.get_price()];
       level_orders.push_back(std::make_unique<OrderType>(std::move(order)));
     }
   }
