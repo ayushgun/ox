@@ -6,23 +6,12 @@
 #include <iterator>
 #include <map>
 #include <memory>
-#include <type_traits>
 #include <vector>
 #include "Order.hpp"
 
 using OrderList = std::vector<std::unique_ptr<Order>>;
 using BidMap = std::map<PriceType, OrderList, std::greater<>>;
 using AskMap = std::map<PriceType, OrderList, std::less<>>;
-
-template <typename T>
-concept OrderMap = requires(T a) {
-  {
-    a.begin()
-  } -> std::same_as<typename std::map<PriceType, OrderList>::iterator>;
-  {
-    a.end()
-  } -> std::same_as<typename std::map<PriceType, OrderList>::iterator>;
-};
 
 /// Represents an order book on the exchange, maintaining lists of bid and ask
 /// orders.
@@ -39,18 +28,17 @@ class OrderBook {
   /// Returns a vector of pointers to all ask orders in the order book.
   std::vector<const Order*> get_asks() const noexcept;
 
-  /// Inserts an Order r-value into the order book and attempts to match it with
-  /// existing orders. Requires OrderType to be derived from Order.
-  template <typename OrderType>
-    requires std::is_base_of<Order, OrderType>::value
+  /// Inserts a universal Order reference into the order book and attempts to
+  /// match it with existing orders. Requires OrderType to be derived from
+  /// Order.
+  template <std::derived_from<Order> OrderType>
   void insert(OrderType&& order) {
     insert(order);
   }
 
   /// Inserts an Order into the order book and attempts to match it with
   /// existing orders. Requires OrderType to be derived from Order.
-  template <typename OrderType>
-    requires std::is_base_of<Order, OrderType>::value
+  template <std::derived_from<Order> OrderType>
   void insert(OrderType& order) {
     bool is_bid = order.get_side() == MarketSide::BID;
 
@@ -71,8 +59,9 @@ class OrderBook {
  private:
   /// Attempts to match an incoming aggressive order with resting orders on the
   /// opposite side of the book using a FIFO algorithm.
-  template <typename OrderMap>
-  void match(Order& aggressive_order, OrderMap& side_map) {
+  template <typename Comparator>
+  void match(Order& aggressive_order,
+             std::map<PriceType, OrderList, Comparator>& side_map) {
     for (auto& [price, orders] : side_map) {
       // If the aggressive order's price is not favorable for a match, then stop
       // matching.
