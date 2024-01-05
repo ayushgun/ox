@@ -28,18 +28,10 @@ class OrderBook {
   /// Returns a vector of pointers to all ask orders in the order book.
   std::vector<const Order*> get_asks() const noexcept;
 
-  /// Inserts a universal Order reference into the order book and attempts to
-  /// match it with existing orders. Requires OrderType to be derived from
-  /// Order.
-  template <std::derived_from<Order> OrderType>
-  void insert(OrderType&& order) {
-    insert(order);
-  }
-
   /// Inserts an Order into the order book and attempts to match it with
   /// existing orders. Requires OrderType to be derived from Order.
   template <std::derived_from<Order> OrderType>
-  void insert(OrderType& order) {
+  void insert(OrderType order) {
     bool is_bid = order.get_side() == MarketSide::BID;
 
     OrderList& level_orders =
@@ -52,7 +44,7 @@ class OrderBook {
     }
 
     if (order.get_size() > 0) {
-      level_orders.push_back(std::make_unique<OrderType>(order));
+      level_orders.push_back(std::make_unique<OrderType>(std::move(order)));
     }
   }
 
