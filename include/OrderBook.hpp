@@ -9,14 +9,12 @@
 #include <vector>
 #include "Order.hpp"
 
-using OrderList = std::vector<std::unique_ptr<Order>>;
-using BidMap = std::map<PriceType, OrderList, std::greater<>>;
-using AskMap = std::map<PriceType, OrderList, std::less<>>;
-
 /// Represents an order book on the exchange, maintaining lists of bid and ask
 /// orders.
 class OrderBook {
  public:
+  using OrderList = std::vector<std::unique_ptr<Order>>;
+
   OrderBook();
 
   OrderBook(const OrderBook&) = delete;
@@ -103,6 +101,6 @@ class OrderBook {
     }
   }
 
-  BidMap bids;
-  AskMap asks;
+  std::map<PriceType, OrderList, std::greater<>> bids;
+  std::map<PriceType, OrderList, std::less<>> asks;
 };
