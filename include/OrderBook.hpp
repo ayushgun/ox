@@ -21,10 +21,10 @@ class OrderBook {
   OrderBook& operator=(const OrderBook&) = delete;
 
   /// Returns a vector of pointers to all bid orders in the order book.
-  std::vector<const Order*> get_bids() const noexcept;
+  std::vector<const Order*> get_bids() const;
 
   /// Returns a vector of pointers to all ask orders in the order book.
-  std::vector<const Order*> get_asks() const noexcept;
+  std::vector<const Order*> get_asks() const;
 
   /// Inserts an Order into the order book and attempts to match it with
   /// existing orders. Requires OrderType to be derived from Order.

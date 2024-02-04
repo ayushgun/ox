@@ -5,7 +5,7 @@
 
 OrderBook::OrderBook() {}
 
-std::vector<const Order*> OrderBook::get_bids() const noexcept {
+std::vector<const Order*> OrderBook::get_bids() const {
   std::vector<const Order*> flattened_bids;
 
   for (const auto& [_, orders] : bids) {
@@ -17,7 +17,7 @@ std::vector<const Order*> OrderBook::get_bids() const noexcept {
   return flattened_bids;
 }
 
-std::vector<const Order*> OrderBook::get_asks() const noexcept {
+std::vector<const Order*> OrderBook::get_asks() const {
   std::vector<const Order*> flattened_asks;
 
   for (const auto& [_, orders] : asks) {
